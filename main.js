@@ -1,58 +1,65 @@
-var mouseEvent ="empty";
-var lastPositionX, lastPositionY;
+var lastPositionOfX, lastPositionOfY;
 
-canvas = document.getElementById('myCanvas');
-ctx = canvas.getContext("2d");
+    canvas = document.getElementById('myCanvas');
+    ctx = canvas.getContext("2d");
+    
+    color = "black";
+    widthOfLine = 2;
 
-color = "black";
-widthLine = 1;
+    var width = screen.width;
 
-canvas.addEventListener("mousedown", myMouseDown);
-function myMouseDown(e)
-{
-    color = document.getElementById("color").value;
-    widthLine = document.getElementById("widthLine").value;
+    newWidth = screen.width - 70;
 
-    mouseEvent = "mouseDown";
-}
-canvas.addEventListener("mouseleave", myMouseLeave);
-function myMouseLeave(e)
-{
-    mouseEvent = "mouseleave";
-}
+    newHeight = screen.height - 300;
 
-canvas.addEventListener("mouseup", myMouseUp);
-function myMouseUp(e)
-{
-    mouseEvent = "mouseup";
-}
+    if(width < 992)
+    {
+        document.getElementById("myCanvas").width = newWidth;
+        document.getElementById("myCanvas").height = newHeight;
+        document.body.style.overflow = "hidden";
+    }
+       canvas.addEventListener("touchstart", myTouchStart);
 
-canvas.addEventListener("mousemove", myMouseMove);
-function myMouseMove(e)
-{
-    PositionMouseX = e.clientX - canvas.offsetLeft;
-    PositionMouseY = e.clientY - canvas.offsetTop;
+       function myTouchStart(e)
+       {
+        console.log("myTouchStart");
+        color = document.getElementById("color").value;
+        widthOfLine = document.getElementById("widthOfLine").value;
 
-    if (mouseEvent == "mouseDown") {
+        lastPositionOfX = e.touches[0].clientX - canvas.offsetLeft;
+        lastPositionOfY = e.touches[0].clientY - canvas.offsetTop; 
+       }
+    
+       canvas.addEventListener("touchmove", myTouchMove);
+
+     function myTouchMove(e)
+        {
+
+        console.log("myTouchMove");
+         currentPositionOfTouchX = e.touches[0].clientX  - canvas.offsetLeft;
+         currentPositionOfTouchY = e.touches[0].clientY - canvas.offsetTop;
+
+        
         ctx.beginPath();
         ctx.strokeStyle = color;
-        ctx.lineWidth = widthLine;
+        ctx.lineWidth = widthOfLine;
 
-        console.log("Last position of x and y coordinates = ");
-        console.log("x = " + lastPositionX + "y = " +lastPositionY);
-        ctx.moveTo(lastPositionX, lastPositionY);  
+        console.log("Ultima posição das coordenadas x e y = ");
+        console.log("x = " + lastPositionOfX + "y = " + lastPositionOfY);
+        ctx.moveTo(lastPositionOfX, lastPositionOfY);
 
-        console.log("Current position of x and y coordinates = ");
-    
-        console.log("x = " + PositionMouseX + "y = " +PositionMouseY);
-        ctx.lineTo(PositionMouseX, PositionMouseY);  
+        console.log("Posição atual das coordenadas x e y = ");
+        console.log("x  = " + currentPositionOfTouchX + "y = " + currentPositionOfTouchY);
+        ctx.lineTo(currentPositionOfTouchX, currentPositionOfTouchY);
         ctx.stroke();
-    }
+        
 
-    lastPositionX = PositionMouseX;
-    lastPositionY = PositionMouseY;
-}
+        lastPositionOfX = currentPositionOfTouchX; 
+        lastPositionOfY = currentPositionOfTouchY;
+        }
 
-function clearArea() {
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-}
+        function clearArea() {
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        }
+
+
